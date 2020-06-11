@@ -48,7 +48,7 @@ namespace pl
 		if (gCamera.isOpened()) {
 			//initialize screen texture with camera width and height
 			sl::Resolution tex_res = gCamera.GetCameraResolution();
-			Screen.Init(gRenderer, tex_res.width, tex_res.height);
+			Screen.Init(gRenderer, tex_res.width, tex_res.height, mWidth, mHeight);
 		}
 	}
 
@@ -100,6 +100,18 @@ namespace pl
 	}
 	void Player::HandleEvent(SDL_Event& in_e)
 	{
+		//Window event occured
+		if (in_e.type == SDL_WINDOWEVENT)
+		{
+			switch (in_e.window.event)
+			{
+			case SDL_WINDOWEVENT_SIZE_CHANGED:
+				mWidth = in_e.window.data1;
+				mHeight = in_e.window.data2;
+				Screen.SetDest(mWidth, mHeight);
+				break;
+			}
+		}
 	}
 
 	void Player::Cleanup()
