@@ -10,7 +10,7 @@ namespace pl
 		void Init(SDL_Renderer *in_renderer, int in_width, int in_height);
 		void UpdateTexture(void* in_pixels);
 		void Render(SDL_Renderer* in_renderer);
-
+		void Cleanup();
 	private:
 		SDL_Texture *mTexture;
 		int mWidth, mHeight;

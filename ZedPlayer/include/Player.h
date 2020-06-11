@@ -15,6 +15,7 @@ namespace pl
 		~Player();
 
 		void Init();
+		void ResizeScreenTexture();
 		void Run();
 		void HandleEvent(SDL_Event& in_e);
 		void Cleanup();
@@ -23,11 +24,17 @@ namespace pl
 		//SDL objects
 		SDL_Window* main_window;
 		SDL_Renderer* gRenderer;
+
 		//other objects
 		cm::SteroCamera gCamera;
+
+		//Screen textures
 		STexture Screen;
+		STexture fpsTexture;
+
 		//parameters
 		int mWidth, mHeight;//window width and height
+
 		//flags
 		bool quitFlag;
 	};

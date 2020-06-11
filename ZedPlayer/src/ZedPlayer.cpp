@@ -8,8 +8,11 @@
 //handle arguments and start the player
 int main(int argc, char*argv[])
 {
-	pl::Player player;
-	player.Init();
-	player.Run();
+	if (argc < 2)// if no arguments provided
+	{
+		pl::Player player;
+		player.Init();
+		player.Run();
+	}
 	return 0;
 }

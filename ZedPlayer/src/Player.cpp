@@ -4,13 +4,8 @@
 #include "Player.h"
 namespace pl
 {
-	Player::Player()
+	Player::Player() :main_window(nullptr), gRenderer(nullptr), quitFlag(false), mWidth(INIT_SCREEN_WIDTH), mHeight(INIT_SCREEN_HEIGHT)
 	{
-		main_window = nullptr;
-		gRenderer = nullptr;
-		quitFlag = false;
-		mWidth = INIT_SCREEN_WIDTH;
-		mHeight = INIT_SCREEN_HEIGHT;
 	}
 
 	Player::~Player()
@@ -28,7 +23,8 @@ namespace pl
 			exit(1);
 		}
 
-		main_window = SDL_CreateWindow("Zed Player", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, mWidth, mHeight, SDL_WINDOW_SHOWN|SDL_WINDOW_RESIZABLE);
+		Cleanup();
+		main_window = SDL_CreateWindow("Zed Player", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, mWidth, mHeight, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 		if (main_window == nullptr)
 		{
 			std::cout << "Failed to create window" << std::endl;
@@ -36,7 +32,7 @@ namespace pl
 		}
 
 		gRenderer = SDL_CreateRenderer(main_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-		if (gRenderer == NULL)
+		if (gRenderer == nullptr)
 		{
 			std::cout << "Failed to create renderer" << std::endl;
 			exit(1);
@@ -44,11 +40,15 @@ namespace pl
 
 		//Initialize camera
 		gCamera.Open();
+		ResizeScreenTexture();
+	}
 
+	void Player::ResizeScreenTexture()
+	{
 		if (gCamera.isOpened()) {
 			//initialize screen texture with camera width and height
-			sl::Resolution temp_res = gCamera.GetCameraResolution();
-			Screen.Init(gRenderer, temp_res.width, temp_res.height);
+			sl::Resolution tex_res = gCamera.GetCameraResolution();
+			Screen.Init(gRenderer, tex_res.width, tex_res.height);
 		}
 	}
 
@@ -67,19 +67,15 @@ namespace pl
 				if (gCamera.GetDeviceList().size() != 0)
 				{
 					gCamera.Open();
-					if (gCamera.isOpened()) 
-					{
-						//initialize screen texture with camera width and height
-						sl::Resolution temp_res = gCamera.GetCameraResolution();
-						Screen.Init(gRenderer, temp_res.width, temp_res.height);
-					}
+					ResizeScreenTexture();
 				}
 			}
 			else
 			{
 				//get camera images and render
 				void *temp_image = gCamera.GetImage();
-				if (temp_image != nullptr) {
+				if (temp_image != nullptr) //in case of hot unplug
+				{
 					Screen.UpdateTexture(temp_image);
 					Screen.Render(gRenderer);
 				}
@@ -108,7 +104,7 @@ namespace pl
 
 	void Player::Cleanup()
 	{
-		if (gRenderer != nullptr) 
+		if (gRenderer != nullptr)
 		{
 			SDL_DestroyRenderer(gRenderer);
 			gRenderer = nullptr;

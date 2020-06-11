@@ -2,17 +2,17 @@
 namespace cm {
 	SteroCamera::SteroCamera()
 	{
-		// Set configuration parameters
+		// Set defaults parameters
 		Init_params.depth_mode = sl::DEPTH_MODE::NONE; // no depth computation required here
-
-		Record_params.compression_mode = sl::SVO_COMPRESSION_MODE::LOSSLESS;//adapt cpu only device
+		Init_params.camera_resolution = sl::RESOLUTION::HD1080;
+		Record_params.compression_mode = sl::SVO_COMPRESSION_MODE::H265;//adapt latest GPU
 		RecordFlag = false; //disable record by default
-
-		CamView = sl::VIEW::SIDE_BY_SIDE;
+		CamView = sl::VIEW::SIDE_BY_SIDE;//two views aligned
 	}
 
 	SteroCamera::~SteroCamera()
 	{
+		//zed.close(); automatically called by camera object
 	}
 
 	void SteroCamera::Open()
@@ -37,12 +37,12 @@ namespace cm {
 
 	void* SteroCamera::GetImage()
 	{
-		err = zed.grab();
+		err = zed.grab(Run_params);
 		if (err == sl::ERROR_CODE::SUCCESS) {
 			// A new image is available if grab() returns SUCCESS
 			zed.retrieveImage(Image, CamView); // Retrieve the left image
 		}
-		else if(err== sl::ERROR_CODE::CAMERA_NOT_DETECTED)
+		else if(err == sl::ERROR_CODE::CAMERA_NOT_DETECTED)
 		{
 			zed.close();
 			return nullptr;
