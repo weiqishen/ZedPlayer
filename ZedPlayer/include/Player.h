@@ -15,6 +15,7 @@ namespace pl
 		~Player();
 
 		void Init();
+		void CleanupGUI();
 		void Run();
 		void HandleEvent(SDL_Event& in_e);
 		void Cleanup();
@@ -22,6 +23,8 @@ namespace pl
 	private:
 		//private methods
 		void RefreshScreenTexture();
+		void InitGUI();
+
 		//SDL objects
 		SDL_Window* main_window;
 		SDL_Renderer* gRenderer;

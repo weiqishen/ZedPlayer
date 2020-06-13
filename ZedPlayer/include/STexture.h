@@ -7,14 +7,17 @@ namespace pl
 	public:
 		STexture();
 		~STexture();
-		void Init(SDL_Renderer *in_renderer, int in_width, int in_height);
-		void UpdateTexture(void* in_pixels);
+		void Init(SDL_Renderer *in_renderer, int in_width, int in_height,SDL_TextureAccess in_acc = SDL_TEXTUREACCESS_STREAMING, SDL_PixelFormatEnum in_format= SDL_PIXELFORMAT_RGBA8888);
+		void InitFromText();
+		void UpdateTextureDynamic(void * in_pixels, SDL_Rect *in_dest = nullptr);
+		void UpdateTextureStatic(void * in_pixels, SDL_Rect * in_dest = nullptr);
 		void SetScreenDest(int in_window_width, int in_window_height);
 		void Render(SDL_Renderer* in_renderer);
 		void Cleanup();
 	private:
 		SDL_Texture *mTexture;
 		int mWidth, mHeight;
+		uint8_t BytesPerPixel;
 		SDL_Rect dest;
 	};
 

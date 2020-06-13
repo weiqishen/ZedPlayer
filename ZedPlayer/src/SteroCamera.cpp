@@ -21,6 +21,7 @@ namespace cm {
 		if (err != sl::ERROR_CODE::SUCCESS)
 		{
 			std::cout << "Camera open " << err << std::endl;
+			zed.close();
 		}
 	}
 
@@ -48,6 +49,7 @@ namespace cm {
 		}
 		else if(err == sl::ERROR_CODE::CAMERA_NOT_DETECTED)
 		{
+			Image.free();
 			zed.close();
 			return nullptr;
 		}
