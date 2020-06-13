@@ -4,7 +4,7 @@
 namespace pl
 {
 
-	void STexture::Init(SDL_Renderer *in_renderer, int in_width, int in_height, int in_window_width, int in_window_height)
+	void STexture::Init(SDL_Renderer *in_renderer, int in_width, int in_height)
 	{
 		//Initialize
 		Cleanup();
@@ -16,8 +16,6 @@ namespace pl
 			std::cout << "SDL could not create texture! SDL_Error:" << SDL_GetError() << std::endl;
 			exit(1);
 		}
-		//calculate render destination
-		SetDest(in_window_width, in_window_height);
 	}
 
 	void STexture::UpdateTexture(void * in_pixels)
@@ -25,7 +23,7 @@ namespace pl
 		SDL_UpdateTexture(mTexture, nullptr, in_pixels, mWidth * 4);
 	}
 
-	void STexture::SetDest(int in_window_width, int in_window_height)
+	void STexture::SetScreenDest(int in_window_width, int in_window_height)
 	{	
 		float texture_ratio, window_ratio;
 		//calculate texture ratio and window ratio

@@ -15,12 +15,13 @@ namespace pl
 		~Player();
 
 		void Init();
-		void ResizeScreenTexture();
 		void Run();
 		void HandleEvent(SDL_Event& in_e);
 		void Cleanup();
 
 	private:
+		//private methods
+		void RefreshScreenTexture();
 		//SDL objects
 		SDL_Window* main_window;
 		SDL_Renderer* gRenderer;

@@ -24,6 +24,10 @@ namespace cm {
 		}
 	}
 
+	void SteroCamera::StartRecord()
+	{
+	}
+
 	bool SteroCamera::isOpened()
 	{
 		return zed.isOpened();
@@ -77,6 +81,8 @@ namespace cm {
 			cam_resol.height = 1242;
 			break;
 		default:
+			std::cout << "Camera resolution not supported!" << std::endl;
+			exit(1);
 			break;
 		}
 		if (CamView == sl::VIEW::SIDE_BY_SIDE)
