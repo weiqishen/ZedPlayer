@@ -176,6 +176,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\glad.c" />
+    <ClCompile Include="src\imgui\imgui.cpp" />
+    <ClCompile Include="src\imgui\imgui_draw.cpp" />
+    <ClCompile Include="src\imgui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="src\imgui\imgui_impl_sdl.cpp" />
+    <ClCompile Include="src\imgui\imgui_widgets.cpp" />
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\SteroCamera.cpp" />
     <ClCompile Include="src\STexture.cpp" />
@@ -185,7 +191,17 @@
     <None Include="SDL2.dll" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\glad\glad.h" />
     <ClInclude Include="include\global.h" />
+    <ClInclude Include="include\imgui\imconfig.h" />
+    <ClInclude Include="include\imgui\imgui.h" />
+    <ClInclude Include="include\imgui\imgui_impl_opengl3.h" />
+    <ClInclude Include="include\imgui\imgui_impl_sdl.h" />
+    <ClInclude Include="include\imgui\imgui_internal.h" />
+    <ClInclude Include="include\imgui\imstb_rectpack.h" />
+    <ClInclude Include="include\imgui\imstb_textedit.h" />
+    <ClInclude Include="include\imgui\imstb_truetype.h" />
+    <ClInclude Include="include\KHR\khrplatform.h" />
     <ClInclude Include="include\Player.h" />
     <ClInclude Include="include\SteroCamera.h" />
     <ClInclude Include="include\STexture.h" />
