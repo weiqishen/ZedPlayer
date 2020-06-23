@@ -23,7 +23,7 @@ namespace pl
 	{
 	}
 
-	void STexture::UpdateTextureDynamic(void * in_pixels,SDL_Rect* in_dest)
+	void STexture::UpdateTextureDynamic(void * in_pixels, SDL_Rect* in_dest)
 	{
 		void *out_pixel;
 		int update_pitch,update_h;
@@ -60,34 +60,11 @@ namespace pl
 			std::cout << "Cannot update texture: " << SDL_GetError() << std::endl;
 	}
 
-	void STexture::SetScreenDest(int in_window_width, int in_window_height)
-	{	
-		float texture_ratio, window_ratio;
-		//calculate texture ratio and window ratio
-		texture_ratio = (float)mWidth / (float)mHeight;
-		window_ratio = (float)in_window_width / (float)in_window_height;
 
-		//calculate desti width and height
-		//calculate desti position
-		if (texture_ratio > window_ratio)//texture is wider
-		{
-			dest.x = 0;
-			dest.w = in_window_width;
-			dest.h = mHeight * (float)in_window_width / (float)mWidth;
-			dest.y = (in_window_height- dest.h)/2;
-		}
-		else//window is wider
-		{
-			dest.y = 0;
-			dest.h = in_window_height;
-			dest.w = mWidth*(float)in_window_height / (float)mHeight;
-			dest.x = (in_window_width- dest.w)/2;
-		}
-	}
 
-	void STexture::Render(SDL_Renderer * in_renderer)
+	void STexture::Render(SDL_Renderer * in_renderer, SDL_FRect *in_dest)
 	{
-		if(SDL_RenderCopy(in_renderer, mTexture, nullptr, &dest))//for now render the whole screen
+		if(SDL_RenderCopyF(in_renderer, mTexture, nullptr, in_dest))//for now render the whole screen
 			std::cout << "Failed to render texture: " << SDL_GetError() << std::endl;
 	}
 
@@ -98,6 +75,16 @@ namespace pl
 			SDL_DestroyTexture(mTexture);
 			mTexture = nullptr;
 		}
+	}
+
+	int STexture::GetWidth() const
+	{
+		return mWidth;
+	}
+
+	int STexture::GetHeight() const
+	{
+		return mHeight;
 	}
 
 	STexture::STexture() :mTexture(nullptr), mWidth(0), mHeight(0)

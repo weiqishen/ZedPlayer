@@ -9,24 +9,26 @@ namespace cm {
 		~SteroCamera();
 
 		bool isOpened();
-		void Open();
-		void StartRecord();
-		void Reset();
+		bool Open();
+		void Close();
+
+		bool ToggleRecord();
 
 		//get functions
-		void *GetImage();
+		unsigned char * GetImage();
+		unsigned char * GetImageFromFile();
+		int GetPlaybackPos();
+		int GetPlaybackLength();
+
 		std::vector<sl::DeviceProperties> GetDeviceList();
 		sl::Resolution GetCameraResolution();
 
 		//set functions
-
+		void SetPlaybackPos(int in_pos);
 		//Camera parameters	
 		sl::RecordingParameters Record_params;
 		sl::InitParameters Init_params;
 		sl::RuntimeParameters Run_params;
-
-		//status
-		bool RecordFlag;
 
 		//image view
 		sl::VIEW CamView;
@@ -35,7 +37,8 @@ namespace cm {
 		sl::Camera zed;
 		sl::ERROR_CODE err;
 		sl::Mat Image;
-
+		//status
+		bool RecordFlag;
 	};
 }
 

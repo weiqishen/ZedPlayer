@@ -11,14 +11,16 @@ namespace pl
 		void InitFromText();
 		void UpdateTextureDynamic(void * in_pixels, SDL_Rect *in_dest = nullptr);
 		void UpdateTextureStatic(void * in_pixels, SDL_Rect * in_dest = nullptr);
-		void SetScreenDest(int in_window_width, int in_window_height);
-		void Render(SDL_Renderer* in_renderer);
+		void Render(SDL_Renderer* in_renderer, SDL_FRect *in_dest = nullptr);
 		void Cleanup();
+
+		//get functions
+		int GetWidth() const;
+		int GetHeight() const;
 	private:
 		SDL_Texture *mTexture;
 		int mWidth, mHeight;
 		uint8_t BytesPerPixel;
-		SDL_Rect dest;
 	};
 
 }

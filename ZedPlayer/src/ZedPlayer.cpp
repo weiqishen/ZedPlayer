@@ -1,5 +1,4 @@
-﻿
-//C++ standard libraies
+﻿//C++ standard libraies
 #include <iostream>
 //project includes
 #include "global.h"

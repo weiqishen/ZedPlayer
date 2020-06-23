@@ -60,6 +60,15 @@
     <ClInclude Include="include\imgui\imstb_truetype.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="include\imgui\ImGuiFileDialog.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\imgui\ImGuiFileDialogConfig.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\dirent\dirent.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\ZedPlayer.cpp">
@@ -90,6 +99,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\imgui\imgui_widgets.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\imgui\ImGuiFileDialog.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

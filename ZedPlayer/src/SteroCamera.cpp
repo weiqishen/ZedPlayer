@@ -3,10 +3,11 @@ namespace cm {
 	SteroCamera::SteroCamera()
 	{
 		// Set defaults parameters
-		Init_params.depth_mode = sl::DEPTH_MODE::NONE; // no depth computation required here
+		//Init_params.depth_mode = sl::DEPTH_MODE::NONE; // no depth computation required here
+
 		Init_params.camera_resolution = sl::RESOLUTION::HD1080;
 		Record_params.compression_mode = sl::SVO_COMPRESSION_MODE::H265;//adapt latest GPU
-		RecordFlag = false; //disable record by default
+		Record_params.video_filename = "zed.svo";//default video file name
 		CamView = sl::VIEW::SIDE_BY_SIDE;//two views aligned
 	}
 
@@ -15,18 +16,37 @@ namespace cm {
 		//zed.close(); automatically called by camera object
 	}
 
-	void SteroCamera::Open()
+	bool SteroCamera::Open()
 	{
+		Close();
 		err = zed.open(Init_params);
 		if (err != sl::ERROR_CODE::SUCCESS)
 		{
 			std::cout << "Camera open " << err << std::endl;
 			zed.close();
+			return false;
 		}
+		return true;
 	}
 
-	void SteroCamera::StartRecord()
+	bool SteroCamera::ToggleRecord()
 	{
+		if (RecordFlag == false)
+		{
+			err = zed.enableRecording(Record_params);
+			if (err == sl::ERROR_CODE::SUCCESS) {
+				RecordFlag = true;
+			}
+			else
+				std::cout << "Record " << err << std::endl;
+		}
+		else
+		{
+			zed.disableRecording();
+			RecordFlag = false;
+			std::cout << "Video has been saved to " << Record_params.video_filename << std::endl;
+		}
+		return RecordFlag;
 	}
 
 	bool SteroCamera::isOpened()
@@ -34,26 +54,40 @@ namespace cm {
 		return zed.isOpened();
 	}
 
-	void SteroCamera::Reset()
+	void SteroCamera::Close()
 	{
+		RecordFlag = false;//reset record flag on open
 		zed.close();
-		Open();
 	}
 
-	void* SteroCamera::GetImage()
+	unsigned char * SteroCamera::GetImage()
 	{
 		err = zed.grab(Run_params);
 		if (err == sl::ERROR_CODE::SUCCESS) {
-			// A new image is available if grab() returns SUCCESS
 			zed.retrieveImage(Image, CamView); // Retrieve the left image
 		}
-		else if(err == sl::ERROR_CODE::CAMERA_NOT_DETECTED)
+		else if(err==sl::ERROR_CODE::CAMERA_NOT_DETECTED)
 		{
 			Image.free();
-			zed.close();
+			Close();
 			return nullptr;
 		}
-		return (void*)Image.getPtr<sl::uchar1>(sl::MEM::CPU);
+		return Image.getPtr<sl::uchar1>(sl::MEM::CPU);
+	}
+
+	unsigned char * SteroCamera::GetImageFromFile()
+	{
+		err = zed.grab(Run_params);
+		if (err == sl::ERROR_CODE::SUCCESS) {
+			zed.retrieveImage(Image, CamView); // Retrieve the left image
+		}
+		else if(err == sl::ERROR_CODE::END_OF_SVOFILE_REACHED)
+		{
+			zed.setSVOPosition(0);
+			return nullptr;
+		}
+		return Image.getPtr<sl::uchar1>(sl::MEM::CPU);
+
 	}
 
 	std::vector<sl::DeviceProperties> SteroCamera::GetDeviceList()
@@ -90,5 +124,17 @@ namespace cm {
 		if (CamView == sl::VIEW::SIDE_BY_SIDE)
 			cam_resol.width *= 2;
 		return cam_resol;
+	}
+	void SteroCamera::SetPlaybackPos(int in_pos)
+	{
+		zed.setSVOPosition(in_pos);
+	}
+	int SteroCamera::GetPlaybackPos()
+	{
+		return zed.getSVOPosition();
+	}
+	int SteroCamera::GetPlaybackLength()
+	{
+		return zed.getSVONumberOfFrames();
 	}
 }
